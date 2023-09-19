@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/StartPage.unity
+    guid: 71aaf54664c4ae54bb0c20423aca1e85
+  - enabled: 1
+    path: Assets/Scenes/XRace.unity
+    guid: 939c58399b05d3642a93a65bddf49eb9
   m_configObjects: {}
