@@ -17,24 +17,29 @@ public class signController : MonoBehaviour
     void Start()
     {
         myText = textHolder.GetComponent<Text>();
-        moveDown();
+        MoveDown();
     }
 
-    void setup(float duration, string message)
+    void Setup(float duration, string message)
     {
         myText.text = message;
         timeOnScreen = duration;
     }
 
-    void moveDown()
+    void MoveDown()
     {
         transform.position = onScreenPos;
-        Invoke("moveUp", timeOnScreen);
+        Invoke(nameof(MoveUp), timeOnScreen);
     }
-    void moveUp()
+    void MoveUp()
     {
         transform.position = offScreenPos;
-        Invoke("Destroy(This)", moveTime);
+        Invoke(nameof(Despawn), moveTime);
+    }
+
+    void Despawn()
+    {
+        Destroy(this);
     }
 
     // Update is called once per frame
