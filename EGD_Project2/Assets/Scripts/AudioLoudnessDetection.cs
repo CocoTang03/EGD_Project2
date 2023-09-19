@@ -6,6 +6,7 @@ public class AudioLoudnessDetection : MonoBehaviour
 {
     public int sampleWindow = 64;
     private AudioClip microphoneClip;
+    public int chosenMic = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +25,7 @@ public class AudioLoudnessDetection : MonoBehaviour
     public void MicrophoneToAudioClip()
     {
         //gets first microphone in devices list
-        string microphoneName = Microphone.devices[0];
+        string microphoneName = Microphone.devices[chosenMic];
         microphoneClip = Microphone.Start(microphoneName, true, 20, AudioSettings.outputSampleRate);
         print(microphoneName);
     }
