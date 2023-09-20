@@ -9,6 +9,7 @@ public class xHorseScript : MonoBehaviour
     public float frequency;
     public float verticalAmplitude;
     public float rotAmplitude;
+    public float zOffset;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +21,7 @@ public class xHorseScript : MonoBehaviour
     {
         gallopTime += Time.deltaTime;
 
-        Vector3 stepPos = new Vector3(0, verticalAmplitude * Mathf.Sin(gallopTime * frequency), transform.position.z);
+        Vector3 stepPos = new Vector3(0, verticalAmplitude * Mathf.Sin(gallopTime * frequency), zOffset);
 
         Vector2 stepDir = new Vector2(rotAmplitude * Mathf.Cos(gallopTime * frequency), 1);
 

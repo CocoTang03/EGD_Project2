@@ -16,7 +16,13 @@ public class audioDisplayerController : MonoBehaviour
 
     public void setLoudness(float proportionOfMax)
     {
-        myRenderer.sprite = spriteOptions[(int)(spriteOptions.Length * proportionOfMax)];
+        int index = (int) ((float) spriteOptions.Length * proportionOfMax);
+        if (index >= spriteOptions.Length)
+        {
+            Debug.LogWarning("index too high at " + index + "/" + spriteOptions.Length);
+            index = spriteOptions.Length - 1;
+        }
+        myRenderer.sprite = spriteOptions[index];
     }
 
     // Update is called once per frame
