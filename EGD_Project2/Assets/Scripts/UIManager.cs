@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    private Animator enterScene;
-    private Animator intoScene;
+    public GameObject bg;
+    public GameObject cv;
+    private Animator enterScene = null;
+    private Animator intoScene = null;
 
     private bool creditOn = false;
     private bool rankingOn = false;
     // Start is called before the first frame update
     private void Awake()
     {
-        enterScene = GameObject.Find("Background").GetComponent<Animator>();
-        intoScene = GameObject.Find("Canvas").GetComponent<Animator>();
+        enterScene = bg.GetComponent<Animator>();
+        intoScene = cv.GetComponent<Animator>();
         
     }
     void Start()
@@ -39,7 +42,6 @@ public class UIManager : MonoBehaviour
                 RankOnClick();
             }
         }
-
     }
 
     //
@@ -47,21 +49,51 @@ public class UIManager : MonoBehaviour
     {
         // Reverse play the animation 
 
+        //enterScene.Play("EnterScene");
+        //intoScene.Play("exitScene");
+        ExampleCoroutine(2f);
         SceneManager.LoadScene("XRace");
     }
 
     public void CreditsOnClick() 
     {
+        if (!creditOn)
+        {
+            //intoScene.Play("exitScene");
+            intoScene.Play("ShowPage");
+        }
+        else
+        {
+            intoScene.Play("ExitPage");
+            //intoScene.Play("IntoScene");
+        }
         GameObject credits = GameObject.Find("Credits");
-        credits.GetComponent<Image>().enabled = !credits.GetComponent<Image>().enabled;
-        credits.GetComponentInChildren<TextMeshProUGUI>().enabled = !credits.GetComponentInChildren<TextMeshProUGUI>().enabled;
+        //credits.GetComponent<Image>().enabled = !credits.GetComponent<Image>().enabled;
+        credits.GetComponent<TextMeshProUGUI>().enabled = !credits.GetComponent<TextMeshProUGUI>().enabled;
         creditOn = !creditOn;
     }
     public void RankOnClick()
     {
-        GameObject credits = GameObject.Find("Ranking");
-        credits.GetComponent<Image>().enabled = !credits.GetComponent<Image>().enabled;
-        credits.GetComponentInChildren<TextMeshProUGUI>().enabled = !credits.GetComponentInChildren<TextMeshProUGUI>().enabled;
+        if (!rankingOn)
+        {
+            //Debug.Log("what");
+            //intoScene.Play("exitScene");
+            intoScene.Play("ShowPage");
+        }
+        else
+        {
+            intoScene.Play("ExitPage");
+            ExampleCoroutine(1f);
+            //intoScene.Play("IntoScene");
+        }
+        GameObject ranking = GameObject.Find("Ranking");
+        //credits.GetComponent<Image>().enabled = !credits.GetComponent<Image>().enabled;
+        ranking.GetComponent<TextMeshProUGUI>().enabled = !ranking.GetComponent<TextMeshProUGUI>().enabled;
         rankingOn = !rankingOn;
+    }
+    IEnumerator ExampleCoroutine(float time)
+    {
+            yield return new WaitForSeconds(time);
+
     }
 }
