@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RaceManager : MonoBehaviour
 {
@@ -315,6 +316,8 @@ public class RaceManager : MonoBehaviour
         float readTime = 12f;
         BigSign(readTime, DecodeHorse(bestTeam) + " team Won!\nScore: " + bestScore);
         yield return new WaitForSeconds(readTime + 2f);
+
+        SceneManager.LoadScene("StartPage");
 
     }
 

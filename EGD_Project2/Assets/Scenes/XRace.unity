@@ -882,13 +882,13 @@ MonoBehaviour:
   - {fileID: 557097668}
   - {fileID: 1930103167}
   - {fileID: 1839218978}
-  horseSpeed: 0.5
+  horseSpeed: 0.75
   accumPoints:
   - 0
   - 0
   - 0
   endFlag: {fileID: 1155091730}
-  globalNoiseToMovementModifier: 1
+  globalNoiseToMovementModifier: 1.5
   recording: 0
   progressPoints: 0
   bigSign: {fileID: 1323189818590164285, guid: a38aea16c52c9fe46adfb66ff6e2a043, type: 3}
