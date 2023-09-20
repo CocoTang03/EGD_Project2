@@ -14,6 +14,9 @@ public class RaceManager : MonoBehaviour
 
     public GameObject[] horses;
     public float horseSpeed;
+    public float[] accumPoints;
+
+    public GameObject endFlag;
 
     public float globalNoiseToMovementModifier;
 
@@ -48,9 +51,6 @@ public class RaceManager : MonoBehaviour
         if (recording)
         {
             cheerUpdate();
-        } else
-        {
-            audioDisplayer.setLoudness(0);
         }
     }
 
@@ -59,7 +59,26 @@ public class RaceManager : MonoBehaviour
         recording = true;
         yield return new WaitForSeconds(seconds);
         recording = false;
+        audioDisplayer.setLoudness(0);
         //Debug.Log("Accumulated " + progressPoints + " points");
+    }
+
+    public IEnumerator AccumulateVarying(float seconds, int horseID)
+    {
+        float runtime = 0;
+        while (runtime < seconds)
+        {
+            detectedLoudness = listener.GetLoudnessFromMicrophone();
+            peakLoudness = Mathf.Max(detectedLoudness, peakLoudness);
+            float effectiveVolume = detectedLoudness / peakLoudness;
+            audioDisplayer.setLoudness(effectiveVolume);
+            float heightModifier = horses[horseID].GetComponent<xHorseScript>().horse.transform.position.y - horses[horseID].transform.position.y;
+            progressPoints += (effectiveVolume * heightModifier + .5f) * Time.deltaTime * globalNoiseToMovementModifier;
+            runtime += Time.deltaTime;
+            yield return null;
+        }
+        audioDisplayer.setLoudness(0);
+
     }
 
     public IEnumerator MoveHorse(float distance, int horseID)
@@ -69,6 +88,17 @@ public class RaceManager : MonoBehaviour
         {
             //Debug.Log("Looping " + remDist);
             horses[horseID].transform.position = (Vector2) horses[horseID].transform.position + Vector2.right * horseSpeed * Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public IEnumerator BackHorse(float distance, int horseID)
+    {
+        //float increment = .1f;
+        for (float remDist = distance; remDist <= 0; remDist += horseSpeed * Time.deltaTime)
+        {
+            //Debug.Log("Looping " + remDist);
+            horses[horseID].transform.position = (Vector2)horses[horseID].transform.position + Vector2.right * horseSpeed * Time.deltaTime;
             yield return null;
         }
     }
@@ -123,6 +153,7 @@ public class RaceManager : MonoBehaviour
             yield return new WaitForSeconds(7f);
 
             StartCoroutine(MoveHorse(progressPoints, i));
+            accumPoints[i] += progressPoints;
             yield return new WaitForSeconds(3f);
         }
         StartCoroutine(SecondStage());
@@ -130,27 +161,31 @@ public class RaceManager : MonoBehaviour
 
     public IEnumerator SecondStage()
     {
-        BigSign(4f, "Round 2, Begin!");
-        yield return new WaitForSeconds(6f);
+        BigSign(2f, "Round 2, Begin!");
+        yield return new WaitForSeconds(4f);
 
+        //calc catchups
+        float avgx = (horses[0].transform.position.x + horses[1].transform.position.x + horses[2].transform.position.x) / 3f;
 
         for (int i = 0; i < 3; i++)
         {
             Debug.Log("Cheering Horse " + i);
             //big sign
-            BigSign(2f, "Round 1\n" + DecodeHorse(i) + " team, Cheer!");
+            BigSign(2f, "Round 2\n" + DecodeHorse(i) + " team, Cheer!");
             yield return new WaitForSeconds(3.4f);
 
             //background sign indicates its a go
             Debug.Log("Passed Sign");
-            SmallSign(7f, "Round 1\n" + DecodeHorse(i) + " team, Cheer!");
+            float raceTime = 7f + (avgx - horses[i].transform.position.x) * 1.1f;
+            SmallSign(raceTime, "Round 2\n" + DecodeHorse(i) + " team, Cheer!");
             yield return new WaitForSeconds(.4f);
 
             progressPoints = 0;
-            StartCoroutine(accumulateVoice(7f));
-            yield return new WaitForSeconds(7f);
+            StartCoroutine(accumulateVoice(raceTime));
+            yield return new WaitForSeconds(raceTime);
 
             StartCoroutine(MoveHorse(progressPoints, i));
+            accumPoints[i] += progressPoints;
             yield return new WaitForSeconds(3f);
         }
         StartCoroutine(VotingA());
@@ -159,14 +194,14 @@ public class RaceManager : MonoBehaviour
     public IEnumerator VotingA()
     {
         float readTime = 3f;
-        BigSign(readTime, "Round 3: Mixup");
+        BigSign(readTime, "Intermission 1: Race Modifiers");
         yield return new WaitForSeconds(readTime + 2f);
 
-        BigSign(readTime, "Cheer for the Mixup you want to play!");
+        BigSign(readTime, "Cheer for the Modifier you want for this round!");
         yield return new WaitForSeconds(readTime + 2f);
 
-        string opA = "reverse";
-        string opB = "double";
+        string opA = "Rythmic Cheering";
+        string opB = "Jeering";
         float voteTime = 5f;
         BigSign(voteTime, "Cheer now for " + opA + "!");
         progressPoints = 0;
@@ -181,14 +216,115 @@ public class RaceManager : MonoBehaviour
         float pointsForB = progressPoints;
         if (pointsForA > pointsForB)
         {
-            StartCoroutine()
+            StartCoroutine(AltStageA());
+        } else
+        {
+            StartCoroutine(AltStageB());
         }
     }
     public IEnumerator AltStageA()
     {
+        float readTime = 3f;
+        BigSign(readTime, "Round 3: Cheer in Time!");
+        yield return new WaitForSeconds(readTime + 2f);
+
+        readTime = 5f;
+        BigSign(readTime, "Cheer when your horse at at its apex and be silent when its at the bottom.");
+        yield return new WaitForSeconds(readTime + 2f);
+
+        //calc catchups
+        float avgx = (horses[0].transform.position.x + horses[1].transform.position.x + horses[2].transform.position.x) / 3f;
+
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log("Cheering Horse " + i);
+            //big sign
+            BigSign(2f, "Round 3\n" + DecodeHorse(i) + " team, Cheer!");
+            yield return new WaitForSeconds(3.4f);
+
+            //background sign indicates its a go
+            Debug.Log("Passed Sign");
+            float raceTime = 7f + (avgx - horses[i].transform.position.x) * 1.1f;
+            SmallSign(raceTime, "Round 3\n" + DecodeHorse(i) + " team, Cheer!");
+            yield return new WaitForSeconds(.4f);
+
+            progressPoints = 0;
+            StartCoroutine(AccumulateVarying(raceTime, i));
+            yield return new WaitForSeconds(raceTime);
+
+            StartCoroutine(MoveHorse(progressPoints, i));
+            accumPoints[i] += progressPoints;
+            yield return new WaitForSeconds(3f);
+        }
+        StartCoroutine(EndRace());
     }
     public IEnumerator AltStageB()
     {
+        float readTime = 3f;
+        BigSign(readTime, "Round 3: Jeer your rivals!");
+        yield return new WaitForSeconds(readTime + 2f);
+
+        readTime = 5f;
+        BigSign(readTime, "Jeer as loud as you can when it's NOT your horse's turn!");
+        yield return new WaitForSeconds(readTime + 2f);
+
+        //calc catchups
+        float avgx = (horses[0].transform.position.x + horses[1].transform.position.x + horses[2].transform.position.x) / 3f;
+
+        for (int i = 0; i < 3; i++)
+        {
+            Debug.Log("Cheering Horse " + i);
+            //big sign
+            BigSign(2f, "Round 3\n" + DecodeHorse((i+1)%3) + " and " + DecodeHorse((i + 2) % 3) + " teams, Jeer!");
+            yield return new WaitForSeconds(3.4f);
+
+            //background sign indicates its a go
+            Debug.Log("Passed Sign");
+            float raceTime = 7f - (avgx - horses[i].transform.position.x) * 1.1f;
+            SmallSign(raceTime, "Round 3\n" + DecodeHorse((i + 1) % 3) + " and " + DecodeHorse((i + 2) % 3) + " teams, Jeer!");
+            yield return new WaitForSeconds(.4f);
+
+            progressPoints = 0;
+            StartCoroutine(accumulateVoice(raceTime));
+            yield return new WaitForSeconds(raceTime);
+
+            progressPoints *= -.7f;
+            StartCoroutine(BackHorse(progressPoints, i));
+            accumPoints[i] += progressPoints;
+            yield return new WaitForSeconds(3f);
+        }
+        StartCoroutine(EndRace());
+    }
+
+    public IEnumerator EndRace()
+    {
+        StartCoroutine(MoveFlag());
+        yield return new WaitForSeconds(4f);
+
+        int bestTeam = -1;
+        float bestScore = 0;
+        for(int i = 0; i < 3; i++)
+        {
+            if (accumPoints[i] > bestScore)
+            {
+                bestTeam = i;
+                bestScore = accumPoints[i];
+            }
+        }
+
+        float readTime = 12f;
+        BigSign(readTime, DecodeHorse(bestTeam) + " team Won!\nScore: " + bestScore);
+        yield return new WaitForSeconds(readTime + 2f);
+
+    }
+
+    public IEnumerator MoveFlag()
+    {
+        for (float mTIme = 0; mTIme < 10f; mTIme += Time.deltaTime)
+        {
+            endFlag.transform.position = endFlag.transform.position + Vector3.left * 5f * Time.deltaTime;
+            yield return null;
+        }
     }
 
 }

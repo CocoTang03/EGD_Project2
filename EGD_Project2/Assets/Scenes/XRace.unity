@@ -437,7 +437,7 @@ Transform:
   m_GameObject: {fileID: 284534430}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.5, y: 0, z: 0}
+  m_LocalPosition: {x: -6.5, y: 0, z: 0.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -883,11 +883,16 @@ MonoBehaviour:
   - {fileID: 1930103167}
   - {fileID: 1839218978}
   horseSpeed: 0.5
+  accumPoints:
+  - 0
+  - 0
+  - 0
+  endFlag: {fileID: 1155091730}
   globalNoiseToMovementModifier: 1
   recording: 0
   progressPoints: 0
   bigSign: {fileID: 1323189818590164285, guid: a38aea16c52c9fe46adfb66ff6e2a043, type: 3}
-  smallSign: {fileID: 0}
+  smallSign: {fileID: 3950026935991257707, guid: de537277331dafb4391ba6e8587dccc0, type: 3}
 --- !u!1 &763864771
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,7 +1123,7 @@ Transform:
   m_GameObject: {fileID: 930232270}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.5, y: 0, z: 0}
+  m_LocalPosition: {x: -6.5, y: 0, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1238,7 +1243,7 @@ Transform:
   m_GameObject: {fileID: 1010047836}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.5, y: 0, z: 0}
+  m_LocalPosition: {x: -6.5, y: 0, z: 0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1871,7 +1876,7 @@ Transform:
   m_GameObject: {fileID: 1155091730}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.25, y: 0, z: 0}
+  m_LocalPosition: {x: 13.81, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2100,7 +2105,7 @@ Transform:
   m_GameObject: {fileID: 1261467764}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3458,7 +3463,7 @@ Transform:
   m_GameObject: {fileID: 1974580380}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.5, y: 0, z: 0}
+  m_LocalPosition: {x: -6.5, y: 0, z: 0.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3827,13 +3832,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: mainSign
       objectReference: {fileID: 0}
+    - target: {fileID: 1323189818590164285, guid: a38aea16c52c9fe46adfb66ff6e2a043, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1351269663285987931, guid: a38aea16c52c9fe46adfb66ff6e2a043, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1652299040}
     - target: {fileID: 6279898802060227299, guid: a38aea16c52c9fe46adfb66ff6e2a043, type: 3}
       propertyPath: timeOnScreen
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7063295167236466329, guid: a38aea16c52c9fe46adfb66ff6e2a043, type: 3}
       propertyPath: m_LocalPosition.x
