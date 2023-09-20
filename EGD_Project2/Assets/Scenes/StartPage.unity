@@ -3232,8 +3232,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Evelyn -- Arts\nCoco -- Netcode/UI Programming/Animation\nJeremy -- Animation/Audio
-    Programming\nVia -- \nXander --"
+  m_text: 'Evelyn -- Arts
+
+    Coco -- Netcode/UI Programming/Animation
+
+    Jeremy
+    -- Animation/Audio Programming
+
+    Via -- Animation/URP Programming
+
+    Xander
+    -- Game Designer/Programming'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 41befb8c7c6b11246bc4b36b1e2899f0, type: 2}
   m_sharedMaterial: {fileID: -9148470509843735309, guid: 41befb8c7c6b11246bc4b36b1e2899f0, type: 2}
